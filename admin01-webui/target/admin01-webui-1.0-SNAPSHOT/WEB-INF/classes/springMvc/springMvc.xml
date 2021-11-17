@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--扫描springmvc配置包-->
+    <context:component-scan base-package="com.otaku.mvc"/>
+    <!--开始springmvc注解驱动-->
+    <mvc:annotation-driven/>
+   <!-- <mvc:default-servlet-handler/>-->
+    <!--配置视图解析器-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/jsp/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--配置异常页面-->
+    <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">error/error</prop>
+            </props>
+        </property>
+    </bean>
+    <mvc:view-controller path="/admin/to/login/page.html" view-name="/login/admin-login"/>
+    <mvc:view-controller path="/admin/to/main/page.html" view-name="/login/admin-main"/>
+    <mvc:view-controller path="user/add.html" view-name="authority/user-add"/>
+    <mvc:view-controller path="/menu/to/page.html" view-name="menu/menu"/>
+    <mvc:view-controller path="/user/to/authority.html" view-name="authority/user-page"/>
+    <!--配置拦截器-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/admin/to/login/page.html"/>
+            <mvc:exclude-mapping path="/admin/do/login.html"/>
+            <mvc:exclude-mapping path="logout.html"/>
+            <bean class="com.otaku.mvc.interceptor.loginInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+</beans>
